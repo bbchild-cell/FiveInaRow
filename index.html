@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <!-- 針對蘋果平板瀏覽器設定檢視區，避免點棋盤時畫面縮放，並支援安全邊距 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- 支援加入主畫面後以全螢幕模式執行，並避免數字被誤判成電話號碼 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="五子棋">
+    <meta name="format-detection" content="telephone=no">
+    <title>五子棋直角坐標（平板離線版）</title>
+    <!-- 主畫面圖示（會由腳本自動繪製高畫質五子棋圖示） -->
+    <link id="app-icon" rel="apple-touch-icon" href="">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>五子棋直角坐標（平板離線版）</h1>
+    </header>
+
+    <main class="container">
+        <!-- 左側控制面板 -->
+        <section class="panel" aria-label="遊戲控制面板">
+            <h2 class="section-title">對局狀態</h2>
+            <div id="status-display" class="status-text">
+                當前輪到：<span class="turn-black">● 玩家（黑子）</span>
+            </div>
+
+            <h2 class="section-title sub-title">電腦難度（放水機制）</h2>
+            <div class="diff-group">
+                <button type="button" class="diff-btn active" data-diff="easy">🌱 歡樂</button>
+                <button type="button" class="diff-btn" data-diff="normal">⭐ 普通</button>
+                <button type="button" class="diff-btn" data-diff="hard">🔥 魔王</button>
+            </div>
+
+            <h2 class="section-title">坐標落子</h2>
+            <div class="input-group">
+                <!-- 橫坐標輸入與加減按鈕，方便平板直接點選或輸入負數 -->
+                <div class="input-box">
+                    <label for="input-x">橫坐標（-7 到 7）</label>
+                    <div class="stepper">
+                        <button type="button" class="step-btn" data-target="input-x" data-delta="-1" aria-label="減少橫坐標">－</button>
+                        <input type="number" id="input-x" min="-7" max="7" step="1" placeholder="0" autocomplete="off">
+                        <button type="button" class="step-btn" data-target="input-x" data-delta="1" aria-label="增加橫坐標">＋</button>
+                    </div>
+                </div>
+                <!-- 縱坐標輸入與加減按鈕，方便平板直接點選或輸入負數 -->
+                <div class="input-box">
+                    <label for="input-y">縱坐標（-7 到 7）</label>
+                    <div class="stepper">
+                        <button type="button" class="step-btn" data-target="input-y" data-delta="-1" aria-label="減少縱坐標">－</button>
+                        <input type="number" id="input-y" min="-7" max="7" step="1" placeholder="0" autocomplete="off">
+                        <button type="button" class="step-btn" data-target="input-y" data-delta="1" aria-label="增加縱坐標">＋</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="error-msg" class="error-msg" role="alert"></div>
+            <button type="button" id="btn-submit" class="btn-submit">確認落子</button>
+            <p class="hint">提示：也可以直接用手指點擊棋盤交點來下棋喔！</p>
+
+            <button type="button" id="btn-reset" class="btn-reset">重新開始</button>
+
+            <h2 class="section-title sub-title">對局日誌</h2>
+            <div id="logs" class="logs-container"></div>
+        </section>
+
+        <!-- 右側棋盤區 -->
+        <section class="board-wrapper" aria-label="五子棋棋盤">
+            <div class="board-bg">
+                <div class="board-layout">
+                    <!-- 左側縱坐標刻度 -->
+                    <div id="y-axis" class="y-axis"></div>
+                    <!-- 中央 15x15 棋盤格線 -->
+                    <div id="grid" class="grid"></div>
+                    <!-- 左下角空白佔位格，讓橫坐標完美對齊棋盤 -->
+                    <div class="axis-corner" aria-hidden="true"></div>
+                    <!-- 下方橫坐標刻度 -->
+                    <div id="x-axis" class="x-axis"></div>
+                </div>
+            </div>
+
+            <!-- 勝負結果覆蓋層 -->
+            <div id="victory-overlay" class="victory-overlay">
+                <div id="victory-card" class="victory-card">
+                    <div id="victory-message" class="victory-message"></div>
+                    <div class="victory-actions">
+                        <button type="button" id="btn-play-again" class="btn-play-again">再來一局</button>
+                        <button type="button" id="btn-close-overlay" class="btn-close-overlay">查看棋盤</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 所有遊戲邏輯集中在獨立腳本檔 -->
+    <script src="script.js" defer></script>
+</body>
+</html>
